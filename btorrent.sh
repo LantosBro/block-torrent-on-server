@@ -6,6 +6,13 @@
 # Author:   sam nikzad
 # Modify: LantosBro (https://github.com/lantosbro)
 
+for cmd in dig awk ufw; do
+    if ! command -v $cmd &> /dev/null; then
+        echo "Error: $cmd is not installed. Please install it and try again."
+        exit 1
+    fi
+done
+
 echo -n "Blocking all torrent traffic on your server. Please wait... "
 wget -q -O/etc/trackers https://raw.githubusercontent.com/LantosBro/block-torrent-on-server/main/domains
 wget -q -O- https://raw.githubusercontent.com/ngosang/trackerslist/master/trackers_all.txt | awk -F'[:/]' '{print $4}' | sort -u >> /etc/trackers
