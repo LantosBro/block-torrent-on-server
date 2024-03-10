@@ -12,12 +12,15 @@ cat >/etc/cron.daily/denypublic<<'EOF'
 IFS=$'\n'
 L=$(/usr/bin/sort /etc/trackers | /usr/bin/uniq)
 for fn in $L; do
-        /usr/sbin/ufw delete deny out to $fn
-        /usr/sbin/ufw delete deny in to $fn
-        /usr/sbin/ufw delete deny forward to $fn
-        /usr/sbin/ufw deny out to $fn
-        /usr/sbin/ufw deny in to $fn
-        /usr/sbin/ufw deny forward to $fn
+        IP=$(host $fn | awk '/has address/ { print $4 }')
+        if [[ -n "$IP" ]]; then
+                /usr/sbin/ufw delete deny out to $IP
+                /usr/sbin/ufw delete deny in from $IP
+                /usr/sbin/ufw delete deny forward to $IP
+                /usr/sbin/ufw deny out to $IP
+                /usr/sbin/ufw deny in from $IP
+                /usr/sbin/ufw deny forward to $IP
+        fi
 done
 EOF
 chmod +x /etc/cron.daily/denypublic
