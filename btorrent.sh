@@ -16,14 +16,14 @@ done
 echo -n "Blocking all torrent traffic on your server. Please wait... "
 wget -q -O/etc/trackers https://raw.githubusercontent.com/LantosBro/block-torrent-on-server/main/domains
 wget -q -O- https://raw.githubusercontent.com/ngosang/trackerslist/master/trackers_all.txt | awk -F'[:/]' '{print $4}' | sort -u >> /etc/trackers
-wget -q -O- https://raw.githubusercontent.com/ngosang/trackerslist/master/trackers_all_ip.txt | awk -F'[:/]' '{print $2}' | sort -u > /etc/tracker_ips
+wget -q -O- https://raw.githubusercontent.com/ngosang/trackerslist/master/trackers_all_ip.txt | sed -n 's/^.*:\/\/\([^:]*\).*$/\1/p' | sort -u > /etc/tracker_ips
 cat >/etc/cron.daily/denypublic<<'EOF'
 #!/bin/bash
 rm /etc/trackers
 rm /etc/tracker_ips
 wget -q -O/etc/trackers https://raw.githubusercontent.com/LantosBro/block-torrent-on-server/main/domains
 wget -q -O- https://raw.githubusercontent.com/ngosang/trackerslist/master/trackers_all.txt | awk -F'[:/]' '{print $4}' | sort -u >> /etc/trackers
-wget -q -O- https://raw.githubusercontent.com/ngosang/trackerslist/master/trackers_all_ip.txt | awk -F'[:/]' '{print $2}' | sort -u > /etc/tracker_ips
+wget -q -O- https://raw.githubusercontent.com/ngosang/trackerslist/master/trackers_all_ip.txt | sed -n 's/^.*:\/\/\([^:]*\).*$/\1/p' | sort -u > /etc/tracker_ips
 IFS=$'\n'
 L=$(/usr/bin/sort /etc/trackers | /usr/bin/uniq)
 for fn in $L; do
