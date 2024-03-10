@@ -12,12 +12,12 @@ cat >/etc/cron.daily/denypublic<<'EOF'
 IFS=$'\n'
 L=$(/usr/bin/sort /etc/trackers | /usr/bin/uniq)
 for fn in $L; do
-        ufw delete deny out to $fn
-        ufw delete deny in to $fn
-        ufw delete deny forward to $fn
-        ufw deny out to $fn
-        ufw deny in to $fn
-        ufw deny forward to $fn
+        /usr/sbin/ufw delete deny out to $fn
+        /usr/sbin/ufw delete deny in to $fn
+        /usr/sbin/ufw delete deny forward to $fn
+        /usr/sbin/ufw deny out to $fn
+        /usr/sbin/ufw deny in to $fn
+        /usr/sbin/ufw deny forward to $fn
 done
 EOF
 chmod +x /etc/cron.daily/denypublic
