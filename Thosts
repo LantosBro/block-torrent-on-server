@@ -236,7 +236,6 @@
 0.0.0.0 arabseries.org
 0.0.0.0 arabsong.org
 0.0.0.0 araditracker.com
-0.0.0.0 archive.org
 0.0.0.0 arctictorrents.com
 0.0.0.0 area51-ts.info
 0.0.0.0 arenabg.ch
@@ -1331,8 +1330,8 @@
 0.0.0.0 hq-torrents.net
 0.0.0.0 hrcj.no-ip.org
 0.0.0.0 ht-t.hu
-0.0.0.0 https://open.kickasstracker.com
-0.0.0.0 https://tracker.bt-hash.com
+0.0.0.0 open.kickasstracker.com
+0.0.0.0 tracker.bt-hash.com
 0.0.0.0 htz3.noho.st
 0.0.0.0 hungercity.org
 0.0.0.0 hunterbt.com
@@ -1514,7 +1513,6 @@
 0.0.0.0 koli.services
 0.0.0.0 komodoisland.net
 0.0.0.0 kraytracker.com
-0.0.0.0 kraytracker.com&amp
 0.0.0.0 ktorrents.com
 0.0.0.0 ktrao.com
 0.0.0.0 kt-t.hu
@@ -2734,7 +2732,7 @@
 0.0.0.0 thetorrentsource.org
 0.0.0.0 thetracker.org
 0.0.0.0 thetradersden.org
-0.0.0.0 thetradersden.org/forums/tracker
+0.0.0.0 thetradersden.org
 0.0.0.0 thevault.bz
 0.0.0.0 the-wizards-lounge.com
 0.0.0.0 thewtd.com
