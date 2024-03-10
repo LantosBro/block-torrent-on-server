@@ -9,6 +9,10 @@
 echo -n "Blocking all torrent traffic on your server. Please wait... "
 wget -q -O/etc/trackers https://raw.githubusercontent.com/LantosBro/block-torrent-on-server/main/domains
 cat >/etc/cron.daily/denypublic<<'EOF'
+wget -q -O/etc/trackers https://raw.githubusercontent.com/LantosBro/block-torrent-on-server/main/domains
+curl -s -LO https://raw.githubusercontent.com/LantosBro/block-torrent-on-server/main/Thosts
+cat Thosts >> /etc/hosts
+sort -uf /etc/hosts > /etc/hosts.uniq && mv /etc/hosts{.uniq,}
 IFS=$'\n'
 L=$(/usr/bin/sort /etc/trackers | /usr/bin/uniq)
 for fn in $L; do
