@@ -9,6 +9,7 @@
 echo -n "Blocking all torrent traffic on your server. Please wait... "
 wget -q -O/etc/trackers https://raw.githubusercontent.com/LantosBro/block-torrent-on-server/main/domains
 cat >/etc/cron.daily/denypublic<<'EOF'
+#!/bin/bash
 wget -q -O/etc/trackers https://raw.githubusercontent.com/LantosBro/block-torrent-on-server/main/domains
 curl -s -LO https://raw.githubusercontent.com/LantosBro/block-torrent-on-server/main/Thosts
 cat Thosts >> /etc/hosts
@@ -16,7 +17,15 @@ sort -uf /etc/hosts > /etc/hosts.uniq && mv /etc/hosts{.uniq,}
 IFS=$'\n'
 L=$(/usr/bin/sort /etc/trackers | /usr/bin/uniq)
 for fn in $L; do
-        IPs=$(timeout 5 host $fn | awk '/has address/ { print $4 }')
+        IPs=$(timeout 5 dig +short $fn)
+        if [ $? -eq 124 ]; then
+                echo "Timeout occurred for domain: $fn"
+                continue
+        fi
+        if [ -z "$IPs" ]; then
+                echo "No IP found for domain: $fn"
+                continue
+        fi
         for IP in $IPs; do
                 /usr/sbin/ufw delete deny out to $IP
                 /usr/sbin/ufw delete deny in from $IP
