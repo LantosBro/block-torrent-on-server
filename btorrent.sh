@@ -48,10 +48,8 @@ for fn in $L; do
         for IP in $IPs; do
                 /usr/sbin/ufw delete deny out to $IP
                 /usr/sbin/ufw delete deny in from $IP
-                /usr/sbin/ufw delete deny forward to $IP
                 /usr/sbin/ufw deny out to $IP
                 /usr/sbin/ufw deny in from $IP
-                /usr/sbin/ufw deny forward to $IP
         done
 done
 
@@ -59,10 +57,8 @@ L=$(/usr/bin/sort /etc/tracker_ips | /usr/bin/uniq)
 for IP in $L; do
         /usr/sbin/ufw delete deny out to $IP
         /usr/sbin/ufw delete deny in from $IP
-        /usr/sbin/ufw delete deny forward to $IP
         /usr/sbin/ufw deny out to $IP
         /usr/sbin/ufw deny in from $IP
-        /usr/sbin/ufw deny forward to $IP
 done
 
 if [ "$UPDATE_HOSTS" == "1" ]; then
