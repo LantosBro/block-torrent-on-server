@@ -24,6 +24,21 @@ echo -n "Blocking all torrent traffic on your server. Please wait... "
 wget -q -O/etc/trackers https://raw.githubusercontent.com/LantosBro/block-torrent-on-server/main/domains
 wget -q -O- https://raw.githubusercontent.com/ngosang/trackerslist/master/trackers_all.txt | awk -F'[:/]' '{print $4}' | sort -u >> /etc/trackers
 wget -q -O- https://raw.githubusercontent.com/ngosang/trackerslist/master/trackers_all_ip.txt | sed -n 's/^.*:\/\/\([^:]*\).*$/\1/p' | sort -u > /etc/tracker_ips
+/usr/sbin/ufw deny proto tcp from any to any port 6881:6889
+/usr/sbin/ufw deny proto udp from any to any port 6881:6889
+/usr/sbin/ufw deny proto tcp from any to any port 1337
+/usr/sbin/ufw deny proto udp from any to any port 1337
+
+/sbin/iptables -N TORRENT_BLOCK
+/sbin/iptables -A TORRENT_BLOCK -m string --algo bm --string "BitTorrent" -j DROP
+/sbin/iptables -A TORRENT_BLOCK -m string --algo bm --string "BitTorrent protocol" -j DROP
+/sbin/iptables -A TORRENT_BLOCK -m string --algo bm --string "peer_id=" -j DROP
+/sbin/iptables -A TORRENT_BLOCK -m string --algo bm --string ".torrent" -j DROP
+/sbin/iptables -A TORRENT_BLOCK -m string --algo bm --string "announce.php?passkey=" -j DROP
+/sbin/iptables -A TORRENT_BLOCK -m string --algo bm --string "torrent" -j DROP
+/sbin/iptables -A TORRENT_BLOCK -m string --algo bm --string "announce" -j DROP
+/sbin/iptables -A TORRENT_BLOCK -m string --algo bm --string "info_hash" -j DROP
+
 cat >/etc/cron.daily/denypublic<<'EOF'
 #!/bin/bash
 source /etc/block-torrent-on-server.conf
@@ -62,6 +77,7 @@ for IP in $L; do
 done
 
 if [ "$UPDATE_HOSTS" == "1" ]; then
+    sed -i '/^0\.0\.0\.0/d' /etc/hosts
     curl -s -LO https://raw.githubusercontent.com/LantosBro/block-torrent-on-server/main/Thosts
     cat Thosts >> /etc/hosts
     wget -q -O- https://raw.githubusercontent.com/ngosang/trackerslist/master/trackers_all.txt | awk -F'[:/]' '{print "0.0.0.0", $4}' >> /etc/hosts
